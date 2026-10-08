@@ -16,8 +16,10 @@ inputs:
 runs:
   using: composite
   steps:
+    # Note: in GitHub expressions an empty string is falsy, so `cond && '' || 'x'` always
+    # yields 'x'. Put the non-empty value first.
     - shell: bash
       run: >
         node "${{ github.action_path }}/bin/gate.mjs" "${{ inputs.dist }}"
         --max-image-kb=${{ inputs.max-image-kb }} --min-text=${{ inputs.min-text }}
-        ${{ inputs.lighthouse == 'true' && '' || '--no-lighthouse' }}
+        ${{ inputs.lighthouse != 'true' && '--no-lighthouse' || '' }}
