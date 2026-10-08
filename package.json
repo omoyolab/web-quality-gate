@@ -3,9 +3,39 @@
   "version": "0.1.0",
   "description": "Catch performance, SEO, image and accessibility problems before a web change lands: a CI check and a git hook for static sites.",
   "type": "module",
-  "bin": { "web-quality-gate": "bin/gate.mjs" },
-  "files": ["bin", "checks", "lighthouserc.json"],
-  "engines": { "node": ">=18" },
+  "bin": {
+    "web-quality-gate": "bin/gate.mjs"
+  },
+  "files": [
+    "bin",
+    "checks",
+    "hooks",
+    "lighthouserc.json"
+  ],
+  "engines": {
+    "node": ">=18"
+  },
   "license": "MIT",
-  "author": "Abimbola Omoyola"
+  "author": "Abimbola Omoyola",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/omoyolab/web-quality-gate.git"
+  },
+  "homepage": "https://github.com/omoyolab/web-quality-gate#readme",
+  "bugs": {
+    "url": "https://github.com/omoyolab/web-quality-gate/issues"
+  },
+  "keywords": [
+    "ci",
+    "lighthouse",
+    "lighthouse-ci",
+    "seo",
+    "accessibility",
+    "performance",
+    "web-performance",
+    "static-site",
+    "pre-push",
+    "github-action",
+    "quality-gate"
+  ]
 }

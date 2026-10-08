@@ -2,7 +2,7 @@
 /**
  * web-quality-gate: run every check against a built static site.
  *
- *   npx github:omoyolab/web-quality-gate [dist] [--no-lighthouse] [--min-text=200] [--max-image-kb=300]
+ *   npx web-quality-gate [dist] [--no-lighthouse] [--min-text=200] [--max-image-kb=300]
  *
  * 1. check-pages: every HTML page has text, a title, a description, a canonical URL, lang,
  *    and images with alt text and dimensions; images it loads stay under a size limit.

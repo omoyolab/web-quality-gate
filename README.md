@@ -1,5 +1,7 @@
 # web-quality-gate
 
+[![npm](https://img.shields.io/npm/v/web-quality-gate)](https://www.npmjs.com/package/web-quality-gate)
+
 Catch performance, SEO, image and accessibility problems **before** a change lands, not after you open PageSpeed Insights on the live site.
 
 It runs against your built static site (Astro, Next export, Eleventy, Hugo, Vite and others) and blocks only on things that are certain, while reporting things that are measured:
@@ -30,7 +32,7 @@ jobs:
       - uses: actions/setup-node@v4
         with: { node-version: 22 }
       - run: npm ci && npm run build
-      - uses: omoyolab/web-quality-gate@main
+      - uses: omoyolab/web-quality-gate@v0.1.0
         with:
           dist: dist          # your build folder
           max-image-kb: 300   # optional
@@ -50,7 +52,17 @@ chmod +x .git/hooks/pre-push
 Or run it any time:
 
 ```sh
-npm run build && npx github:omoyolab/web-quality-gate dist
+npm run build && npx web-quality-gate dist
+```
+
+Or add it to a project so everyone runs the same version:
+
+```sh
+npm install --save-dev web-quality-gate
+```
+
+```json
+{ "scripts": { "quality": "npm run build && web-quality-gate dist" } }
 ```
 
 Options: `--no-lighthouse` (fast: page and link checks only), `--max-image-kb=300`, `--min-text=200`.
