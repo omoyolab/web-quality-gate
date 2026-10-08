@@ -32,7 +32,7 @@ jobs:
       - uses: actions/setup-node@v4
         with: { node-version: 22 }
       - run: npm ci && npm run build
-      - uses: omoyolab/web-quality-gate@v0.1.0
+      - uses: omoyolab/web-quality-gate@v0.1.1
         with:
           dist: dist          # your build folder
           max-image-kb: 300   # optional
