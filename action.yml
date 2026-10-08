@@ -13,6 +13,9 @@ inputs:
   min-text:
     description: Fewest characters of text a page's HTML may contain
     default: '200'
+  canonical:
+    description: Require a canonical link on every page
+    default: 'true'
 runs:
   using: composite
   steps:
@@ -23,3 +26,4 @@ runs:
         node "${{ github.action_path }}/bin/gate.mjs" "${{ inputs.dist }}"
         --max-image-kb=${{ inputs.max-image-kb }} --min-text=${{ inputs.min-text }}
         ${{ inputs.lighthouse != 'true' && '--no-lighthouse' || '' }}
+        ${{ inputs.canonical != 'true' && '--no-canonical' || '' }}

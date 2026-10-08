@@ -2,7 +2,7 @@
 /**
  * web-quality-gate: run every check against a built static site.
  *
- *   npx web-quality-gate [dist] [--no-lighthouse] [--min-text=200] [--max-image-kb=300]
+ *   npx web-quality-gate [dist] [--no-lighthouse] [--no-canonical] [--min-text=200] [--max-image-kb=300]
  *
  * 1. check-pages: every HTML page has text, a title, a description, a canonical URL, lang,
  *    and images with alt text and dimensions; images it loads stay under a size limit.
@@ -19,7 +19,7 @@ import { fileURLToPath } from 'node:url';
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const args = process.argv.slice(2);
 const dist = args.find((a) => !a.startsWith('--')) ?? 'dist';
-const passThrough = args.filter((a) => a.startsWith('--min-text=') || a.startsWith('--max-image-kb='));
+const passThrough = args.filter((a) => a.startsWith('--min-text=') || a.startsWith('--max-image-kb=') || a === '--no-canonical');
 const lighthouse = !args.includes('--no-lighthouse');
 
 if (!existsSync(dist)) {

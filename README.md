@@ -9,7 +9,7 @@ It runs against your built static site (Astro, Next export, Eleventy, Hugo, Vite
 | Blocks the merge | Reported, never blocks |
 |---|---|
 | Every page has real text in its HTML (not an empty JavaScript shell) | Lighthouse performance score |
-| Every page has a title, meta description, canonical URL and `lang` | Largest Contentful Paint and layout shift (lab) |
+| Every page has a title, meta description and `lang`, plus a canonical URL (turn off with `canonical: false` / `--no-canonical`) | Largest Contentful Paint and layout shift (lab) |
 | No duplicate titles, no pages accidentally marked `noindex` | Images in the build that no page uses |
 | Images have alt text and width and height (no layout shift) | |
 | Images a page loads stay under a size limit (default 300 KB) | |
@@ -17,7 +17,9 @@ It runs against your built static site (Astro, Next export, Eleventy, Hugo, Vite
 | Byte budgets: JavaScript, images and total page weight (Lighthouse) | |
 | Lighthouse SEO and accessibility audits: title, description, crawlable, alt text, `lang`, colour contrast | |
 
-Why the split: a Lighthouse performance score moves a few points between runs of the same page. Gate on it and it fails at random, and people learn to ignore it. Bytes, titles and missing alt text never fluctuate.
+Why the split: a Lighthouse performance score moves a few points between runs of the same page, and more on busy CI machines. Gate on it and it fails at random, and people learn to ignore it. Bytes, titles and missing alt text never fluctuate. Lighthouse runs each page three times and judges the best run, so one slow run does not raise a warning.
+
+The page and link checks read your built files directly, so they are fully deterministic. The Lighthouse accessibility audits run in a real browser: they are stable on a static build, but if your pages load third-party scripts, fonts or widgets, results can vary between runs. If a check turns flaky, pin the conditions (no third-party requests during the test, a fixed browser version) or move it from `error` to `warn` in your own `lighthouserc.json`.
 
 ## In GitHub Actions
 
@@ -32,7 +34,7 @@ jobs:
       - uses: actions/setup-node@v4
         with: { node-version: 22 }
       - run: npm ci && npm run build
-      - uses: omoyolab/web-quality-gate@v0.1.1
+      - uses: omoyolab/web-quality-gate@v0.1.2
         with:
           dist: dist          # your build folder
           max-image-kb: 300   # optional
@@ -65,7 +67,7 @@ npm install --save-dev web-quality-gate
 { "scripts": { "quality": "npm run build && web-quality-gate dist" } }
 ```
 
-Options: `--no-lighthouse` (fast: page and link checks only), `--max-image-kb=300`, `--min-text=200`.
+Options: `--no-lighthouse` (fast: page and link checks only), `--no-canonical`, `--max-image-kb=300`, `--min-text=200`.
 
 ## Changing the budgets
 

@@ -5,7 +5,7 @@
  * Lighthouse tests a handful of URLs. This walks the whole output folder and
  * checks the things that should be true on every page and never fluctuate.
  *
- * Usage: node check-pages.mjs [dist] [--min-text=200] [--max-image-kb=300]
+ * Usage: node check-pages.mjs [dist] [--min-text=200] [--max-image-kb=300] [--no-canonical]
  * Exit code 1 if any page fails. Zero dependencies.
  */
 import { readdirSync, readFileSync, statSync } from 'node:fs';
@@ -16,6 +16,8 @@ const dist = args.find((a) => !a.startsWith('--')) ?? 'dist';
 const opt = (name, fallback) => Number(args.find((a) => a.startsWith(`--${name}=`))?.split('=')[1] ?? fallback);
 const MIN_TEXT = opt('min-text', 200);
 const MAX_IMAGE_KB = opt('max-image-kb', 300);
+// Canonical URLs matter when pages are reachable at more than one address; not every site needs them.
+const REQUIRE_CANONICAL = !args.includes('--no-canonical');
 // Pages that are allowed to be thin or unindexed.
 const EXEMPT = /(^|\/)(404|500)\.html$|(^|\/)404\/index\.html$/;
 
@@ -70,7 +72,7 @@ for (const file of pages) {
   const description = metas.find((m) => /name\s*=\s*["']description["']/i.test(m));
   if (!description || !attr(description, 'content')?.trim()) fail(file, 'missing meta description');
 
-  if (!/<link\b[^>]*rel\s*=\s*["']canonical["'][^>]*>/i.test(head)) fail(file, 'missing canonical link');
+  if (REQUIRE_CANONICAL && !/<link\b[^>]*rel\s*=\s*["']canonical["'][^>]*>/i.test(head)) fail(file, 'missing canonical link (use --no-canonical if your site does not need them)');
   if (!/<html\b[^>]*\slang\s*=\s*["'][^"']+["']/i.test(html)) fail(file, 'missing lang attribute on <html>');
   if (metas.some((m) => /name\s*=\s*["']robots["']/i.test(m) && /noindex/i.test(m))) fail(file, 'page is marked noindex');
 
@@ -108,4 +110,4 @@ if (problems.length) {
   for (const p of problems) console.error(`  ✘ ${p}`);
   process.exit(1);
 }
-console.log(`check-pages: ${checked} pages passed (text, title, description, canonical, lang, images)`);
+console.log(`check-pages: ${checked} pages passed (text, title, description, ${REQUIRE_CANONICAL ? 'canonical, ' : ''}lang, images)`);

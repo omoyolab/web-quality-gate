@@ -1,6 +1,6 @@
 {
   "name": "web-quality-gate",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Catch performance, SEO, image and accessibility problems before a web change lands: a CI check and a git hook for static sites.",
   "type": "module",
   "bin": {
