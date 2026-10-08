@@ -1,0 +1,26 @@
+{
+  "ci": {
+    "collect": {
+      "staticDistDir": "./dist",
+      "numberOfRuns": 1,
+      "settings": { "chromeFlags": "--headless=new --no-sandbox" }
+    },
+    "assert": {
+      "assertions": {
+        "resource-summary:script:size": ["error", { "maxNumericValue": 150000 }],
+        "resource-summary:image:size": ["error", { "maxNumericValue": 500000 }],
+        "resource-summary:total:size": ["error", { "maxNumericValue": 1000000 }],
+        "document-title": "error",
+        "meta-description": "error",
+        "is-crawlable": "error",
+        "image-alt": "error",
+        "html-has-lang": "error",
+        "color-contrast": "error",
+        "categories:performance": ["warn", { "minScore": 0.9 }],
+        "largest-contentful-paint": ["warn", { "maxNumericValue": 2500 }],
+        "cumulative-layout-shift": ["warn", { "maxNumericValue": 0.1 }]
+      }
+    },
+    "upload": { "target": "filesystem", "outputDir": ".lighthouseci" }
+  }
+}
